@@ -762,7 +762,7 @@ class Lain extends CI_Controller
 						</td>
 
 
-						<td width="2%" style="font-size:10px;">a</td>
+						<td width="2%" style="font-size:10px;"></td>
 						
 						<td width="49%" style="border:1;color:#000;font-size:18px;" >
 							
