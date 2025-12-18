@@ -918,7 +918,7 @@ class Lain extends CI_Controller
 
 				// $this->M_fungsi->_mpdf_hari('L', 'A4','AAA', $html, 'AAA.pdf', 5, 5, 5, 10,'','','','MINI SOCCER');
 
-				$this->m_fungsi->_mpdf_hari2($position, 'F4', $judul, $html,$judul.'.pdf', 2, 2, 2, 2,'','','','F4','no');
+				$this->m_fungsi->_mpdf_hari2($position, 'F4', $judul, $html,$judul.'.pdf', 5, 5, 2, 2,'','','','F4','no');
 				
 				// $this->m_fungsi->newMpdf('aa', '', $html, 5, 5, 5, 5, $position, 'TT', 'aa.pdf');
 				break;
