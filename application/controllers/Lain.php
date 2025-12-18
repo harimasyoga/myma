@@ -26,6 +26,16 @@ class Lain extends CI_Controller
 		$this->load->view('footer');
 	}
 
+	function Label_box()
+	{
+		$data = array(
+			'judul' => "LABEL BOX ARSIP"
+		);
+		$this->load->view('header', $data);
+		$this->load->view('Lain/v_label', $data);
+		$this->load->view('footer');
+	}
+
 	function load_data()
 	{
 		// $db2 = $this->load->database('database_simroll', TRUE);
@@ -364,6 +374,48 @@ class Lain extends CI_Controller
 
 				$i++;
 			}
+		}else if ($jenis == "label") {
+
+			$query   = $this->db->query("SELECT*from tr_label order by id_label")->result();
+
+			$i = 1;
+			foreach ($query as $r) {
+
+				$id             = "'$r->id_label'";
+
+				$row = array();
+				$row[] = '<div class="text-center">'.$i.'</div>';
+				$row[] = '<div class="text-center" style="font-weight:bold;color:#f00">'.$r->thnn1.'</div>';
+				$row[] = '<div class="text-center" style="font-weight:bold;color:#f00">'.$r->no_box1.'</div>';
+				$row[] = '<div class="text-center" style="font-weight:bold;">'.$r->no_box2.'</div>';
+				$row[] = '<div class="text-center" style="font-weight:bold;">'.$r->no_box3.'</div>';
+				$row[] = '<div class="text-left" style="font-weight:bold;">'.$r->no_box4.'</div>';
+				
+				$aksi = "";
+
+				if (in_array($this->session->userdata('level'), ['Admin','konsul_keu','ma']))
+				{
+					$aksi = '
+						<a class="btn btn-sm btn-warning" onclick="edit_data(' . $id . ')" title="EDIT DATA" >
+							<b><i class="fa fa-edit"></i> </b>
+						</a> 
+						
+						<button type="button" title="DELETE"  onclick="deleteData('.$id.', \''.$r->no_box1.'|'.$r->no_box2.'|'.$r->no_box3.'|'.$r->no_box4.'\')"
+ class="btn btn-danger btn-sm">
+							<i class="fa fa-trash-alt"></i>
+						</button> 
+
+						<a target="_blank" class="btn btn-sm btn-danger" href="' . base_url("Lain/Cetak_label?id_label=" . $r->id_label."&ctk=1") . '" title="CETAK" ><b><i class="fa fa-print"></i> </b></a>
+						';
+				} else {
+					$aksi = '';
+				}
+
+				$row[]    = '<div class="text-center">'.$aksi.'</div>';
+				$data[]   = $row;
+
+				$i++;
+			}
 		}else{
 			
 		}
@@ -396,6 +448,14 @@ class Lain extends CI_Controller
 			$data_h   = $this->db->query($queryh)->row();
 
 			$queryd   = "SELECT a.*,(select nm_job from m_job b where a.pil_job=b.id_job)nm_job FROM tr_tutorial a where id_tutor='$id' order by id_tutor";
+
+		}else if($jenis=='edit_label')
+		{  				
+			$queryh   = "SELECT * FROM tr_label a where id_label='$id' order by id_label";
+			
+			$data_h   = $this->db->query($queryh)->row();
+
+			$queryd   = "SELECT * FROM tr_label a where id_label='$id' order by id_label";
 
 		}else{
 
@@ -444,6 +504,10 @@ class Lain extends CI_Controller
 		{
 			$result          = $this->m_master->query("DELETE FROM tr_tutorial WHERE  $field = '$id'");
 			
+		} else if ($jenis == "tr_label") 
+		{
+			$result          = $this->m_master->query("DELETE FROM tr_label WHERE  $field = '$id'");
+			
 		} else {
 
 			$result = $this->m_master->query("DELETE FROM $jenis WHERE  $field = '$id'");
@@ -463,6 +527,16 @@ class Lain extends CI_Controller
 	}
 
 	
+	function insert_label()
+	{
+		if($this->session->userdata('username'))
+		{ 
+			$result = $this->M_transaksi->save_label();
+			echo json_encode($result);
+		}
+		
+	}
+	
 	function Cetak_tutor()
 	{
 		
@@ -478,22 +552,22 @@ class Lain extends CI_Controller
         $query_detail = $this->db->query("SELECT a.*,(select nm_job from m_job b where a.pil_job=b.id_job)nm_job FROM tr_tutorial a where id_tutor='$id_tutor' order by id_tutor");		
 
 		
-		$data_syarat = str_replace('
-', "\n ", $data->syarat);
+				$data_syarat = str_replace('
+		', "\n ", $data->syarat);
 
-		$ket_ok = str_replace('
-', "\n ", $data->ket);
+				$ket_ok = str_replace('
+		', "\n ", $data->ket);
 
-		$dasar_hukum_ok = str_replace('
-', "\n ", $data->dasar_hukum);
+				$dasar_hukum_ok = str_replace('
+		', "\n ", $data->dasar_hukum);
+				
+
+				$tutor_ok = str_replace('
+		', "\n ", $data->tutor);
 		
 
-		$tutor_ok = str_replace('
-', "\n ", $data->tutor);
-		
-
-		$error_log_ok = str_replace('
-', "\n ", $data->error_log);
+				$error_log_ok = str_replace('
+		', "\n ", $data->error_log);
 		
 		if($data->nm_job =='')
 		{
@@ -588,6 +662,263 @@ class Lain extends CI_Controller
 				// $this->M_fungsi->_mpdf_hari('L', 'A4','AAA', $html, 'AAA.pdf', 5, 5, 5, 10,'','','','MINI SOCCER');
 
 				$this->m_fungsi->_mpdf_hari2($position, 'A4', $judul, $html,$judul.'.pdf', 5, 5, 5, 10);
+				
+				// $this->m_fungsi->newMpdf('aa', '', $html, 5, 5, 5, 5, $position, 'TT', 'aa.pdf');
+				break;
+
+				
+				
+			case 2;
+				header("Cache-Control: no-cache, no-store, must-revalidate");
+				header("Content-Type: application/vnd-ms-excel");
+				header("Content-Disposition: attachment; filename= $judul.xls");
+				$this->load->view('Master/master_cetak', $data);
+				break;
+		}
+		
+	}
+	
+	function Cetak_label()
+	{
+		
+		$html       = '';
+		$id_label   = $_GET['id_label'];
+		// $ctk        = 0;
+		$ctk        = $_GET['ctk'];
+
+        $query_header = $this->db->query("SELECT * FROM tr_label a where id_label='$id_label' order by id_label");
+        
+        $data = $query_header->row();
+        
+        $query_detail = $this->db->query("SELECT * FROM tr_label a where id_label='$id_label' order by id_label");		
+
+		
+		$position   = 'P';
+		$judul      = $data->pilihan1.''.$data->thnn1.''.$data->no_box1;
+
+		
+		$html = '<table style="margin-bottom:5px;border-collapse:collapse;vertical-align:top;width:100%;font-weight:bold;font-family:Tahoma">
+		</table>
+		<br></br>';
+
+
+		if ($query_header->num_rows() > 0) 
+		{
+			
+			$no_perkara1 = str_replace('
+', "\n \n ", $data->no_perkara1);
+
+			$no_perkara2 = str_replace('
+', "\n \n ", $data->no_perkara2);
+
+			$no_perkara3 = str_replace('
+', "\n \n ", $data->no_perkara3);
+
+			$no_perkara4 = str_replace('
+', "\n \n ", $data->no_perkara4);
+
+
+			$html .= '<table width="100%" border="1" cellspacing="1" cellpadding="3" style="border-collapse:collapse;font-family: ;text-align:center;font-weight:bold;">
+					<tr>
+						<td width="49%" style="border:1;color:#000;font-size:18px;" >
+							
+							<img src="'.base_url('assets/gambar/muara teweh.png').'" width="100" height="80">
+							<br>
+							<br>
+
+							PENGADILAN NEGERI MUARA TEWEH
+							<br><br>
+
+							DAFTAR ISI
+							<br><br>
+								
+							<table width="100%" >
+								<tr>
+									<td style="font-size:22px;" >
+										NO.BOX : '.$data->no_box1.'
+									</td>									
+									<br><br>
+								</tr>
+							</table>
+								TAHUN '.$data->thnn1.'
+								<br>
+
+								PERKARA PIDANA
+								<br><br>
+
+								NO PERKARA :
+								<br>
+
+							<table width="100%" >
+								<tr>
+									<td style="text-align:left;font-size:16px;" >
+										'.nl2br(htmlspecialchars($no_perkara1)).'
+									</td>									
+									<br><br>
+								</tr>
+							</table>
+								<br>
+							
+						</td>
+
+
+						<td width="2%" style="font-size:10px;">a</td>
+						
+						<td width="49%" style="border:1;color:#000;font-size:18px;" >
+							
+							<img src="'.base_url('assets/gambar/muara teweh.png').'" width="100" height="80">
+							<br>
+							<br>
+
+							PENGADILAN NEGERI MUARA TEWEH
+							<br><br>
+
+							DAFTAR ISI
+							<br><br>
+								
+							<table width="100%" >
+								<tr>
+									<td style="font-size:22px;" >
+										NO.BOX : '.$data->no_box2.'
+									</td>									
+									<br><br>
+								</tr>
+							</table>
+								TAHUN '.$data->thnn2.'
+								<br>
+
+								PERKARA PIDANA
+								<br><br>
+
+								NO PERKARA :
+								<br>
+
+							<table width="100%" >
+								<tr>
+									<td style="text-align:left;font-size:16px;" >
+										'.nl2br(htmlspecialchars($no_perkara2)).'
+									</td>									
+									<br><br>
+								</tr>
+							</table>
+								<br>
+							
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td width="49%" style="border:1;color:#000;font-size:18px;" >
+							
+							<img src="'.base_url('assets/gambar/muara teweh.png').'" width="100" height="80">
+							<br>
+							<br>
+
+							PENGADILAN NEGERI MUARA TEWEH
+							<br><br>
+
+							DAFTAR ISI
+							<br><br>
+								
+							<table width="100%" >
+								<tr>
+									<td style="font-size:22px;" >
+										NO.BOX : '.$data->no_box3.'
+									</td>									
+									<br><br>
+								</tr>
+							</table>
+								TAHUN '.$data->thnn3.'
+								<br>
+
+								PERKARA PIDANA
+								<br><br>
+
+								NO PERKARA :
+								<br>
+
+							<table width="100%" >
+								<tr>
+									<td style="text-align:left;font-size:16px;" >
+										'.nl2br(htmlspecialchars($no_perkara3)).'
+									</td>									
+									<br><br>
+								</tr>
+							</table>
+								<br>
+							
+						</td>
+
+
+						<td width="2">&nbsp;</td>
+						
+						<td width="49%" style="border:1;color:#000;font-size:18px;" >
+							
+							<img src="'.base_url('assets/gambar/muara teweh.png').'" width="100" height="80">
+							<br>
+							<br>
+
+							PENGADILAN NEGERI MUARA TEWEH
+							<br><br>
+
+							DAFTAR ISI
+							<br><br>
+								
+							<table width="100%" >
+								<tr>
+									<td style="font-size:22px;" >
+										NO.BOX : '.$data->no_box4.'
+									</td>									
+									<br><br>
+								</tr>
+							</table>
+								TAHUN '.$data->thnn4.'
+								<br>
+
+								PERKARA PIDANA
+								<br><br>
+
+								NO PERKARA :
+								<br>
+
+							<table width="100%" >
+								<tr>
+									<td style="text-align:left;font-size:16px;" >
+										'.nl2br(htmlspecialchars($no_perkara4)).'
+									</td>									
+									<br><br>
+								</tr>
+							</table>
+								<br>
+							
+						</td>
+					</tr>
+			</table><br>';
+
+		} else {
+			$html .= '<h1> Data Kosong </h1>';
+		}
+
+		
+		// $data['prev'] = $html;
+
+		switch ($ctk) {
+			case 0;
+				echo ("<title>$judul</title>");
+				echo ($html);
+				break;
+
+			case 1;
+
+				// $this->m_fungsi->newMpdf($judul, '', $html, 10, 3, 3, 3, 'L', 'TT', $bln_judul.'.pdf');
+
+				// $this->M_fungsi->_mpdf_hari('L', 'A4','AAA', $html, 'AAA.pdf', 5, 5, 5, 10,'','','','MINI SOCCER');
+
+				$this->m_fungsi->_mpdf_hari2($position, 'F4', $judul, $html,$judul.'.pdf', 2, 2, 2, 2,'','','','F4','no');
 				
 				// $this->m_fungsi->newMpdf('aa', '', $html, 5, 5, 5, 5, $position, 'TT', 'aa.pdf');
 				break;

@@ -79,5 +79,6 @@ $route['ZKAgkEbMHrNHerG']   = 'Tutorial/List';
 $route['ukGfQtmXfMQejYK']   = 'Jobdesk/List';
 $route['Nkhx8TAKa3cQYPk2']  = 'Belajar/List';
 $route['L5oBEbhkGZOH2tbL']  = 'Lain/Perkara_bht';
+$route['fDy3CxliLV4PDJT4']  = 'Lain/Label_box';
 // $route['K2NSKk3jfgoAlPZ'] = 'Master/Checklist';
 
