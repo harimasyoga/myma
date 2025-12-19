@@ -747,7 +747,7 @@ class Lain extends CI_Controller
 								<br><br>
 
 								NO PERKARA :
-								<br>
+								<br><br>
 
 							<table width="100%" >
 								<tr>
@@ -791,7 +791,7 @@ class Lain extends CI_Controller
 								<br><br>
 
 								NO PERKARA :
-								<br>
+								<br><br>
 
 							<table width="100%" >
 								<tr>
@@ -839,7 +839,7 @@ class Lain extends CI_Controller
 								<br><br>
 
 								NO PERKARA :
-								<br>
+								<br><br>
 
 							<table width="100%" >
 								<tr>
@@ -883,7 +883,7 @@ class Lain extends CI_Controller
 								<br><br>
 
 								NO PERKARA :
-								<br>
+								<br><br>
 
 							<table width="100%" >
 								<tr>
