@@ -737,11 +737,11 @@ class Lain extends CI_Controller
 									<td style="font-size:22px;" >
 										NO.BOX : '.$data->no_box1.'
 									</td>									
-									<br><br>
+									<br>
 								</tr>
 							</table>
 								TAHUN '.$data->thnn1.'
-								<br>
+								<br><br>
 
 								PERKARA PIDANA
 								<br><br>
@@ -781,11 +781,11 @@ class Lain extends CI_Controller
 									<td style="font-size:22px;" >
 										NO.BOX : '.$data->no_box2.'
 									</td>									
-									<br><br>
+									<br>
 								</tr>
 							</table>
 								TAHUN '.$data->thnn2.'
-								<br>
+								<br><br>
 
 								PERKARA PIDANA
 								<br><br>
@@ -829,11 +829,11 @@ class Lain extends CI_Controller
 									<td style="font-size:22px;" >
 										NO.BOX : '.$data->no_box3.'
 									</td>									
-									<br><br>
+									<br>
 								</tr>
 							</table>
 								TAHUN '.$data->thnn3.'
-								<br>
+								<br><br>
 
 								PERKARA PIDANA
 								<br><br>
@@ -873,11 +873,11 @@ class Lain extends CI_Controller
 									<td style="font-size:22px;" >
 										NO.BOX : '.$data->no_box4.'
 									</td>									
-									<br><br>
+									<br>
 								</tr>
 							</table>
 								TAHUN '.$data->thnn4.'
-								<br>
+								<br><br>
 
 								PERKARA PIDANA
 								<br><br>
