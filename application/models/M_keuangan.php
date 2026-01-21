@@ -21,7 +21,7 @@ class M_keuangan extends CI_Model
 		$ket            = $this->input->post('ket');
 		$tgl_minso      = $this->input->post('tgl_minso');
 
-		if($jenis=='masuk'){
+		if($jenis=='masuk' || $jenis=='masuk_sparing'){
 			$masuk    = str_replace('.','',$this->input->post('total_all'));
 			$keluar   = 0;
 		}else{
