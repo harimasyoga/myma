@@ -239,6 +239,8 @@ class Keu extends CI_Controller
 					$keluar_sparing  = 0;
 					$masuk_internal  = 0;
 					$keluar_internal = 0;
+					$style_masuk = 'style="background-color:#b2d2fa"';
+					$style_keluar = ' ';
 				
 				}else if($r->jns == 'keluar_sparing')
 				{
@@ -246,6 +248,8 @@ class Keu extends CI_Controller
 					$keluar_sparing  = $r->tot_keluar;
 					$masuk_internal  = 0;
 					$keluar_internal = 0;
+					$style_masuk = ' ';
+					$style_keluar = 'style="background-color:#f9c8c8"';
 				
 				}else if($r->jns == 'masuk'){
 
@@ -253,12 +257,16 @@ class Keu extends CI_Controller
 					$keluar_sparing  = 0;
 					$masuk_internal  = $r->tot_masuk;
 					$keluar_internal = 0;
+					$style_masuk = 'style="background-color:#b2d2fa"';
+					$style_keluar = ' ';
 
 				}else{
 					$masuk_sparing   = 0;
 					$keluar_sparing  = 0;
 					$masuk_internal  = 0;
 					$keluar_internal = $r->tot_keluar;
+					$style_masuk = ' ';
+					$style_keluar = 'style="background-color:#f9c8c8"';
 				}
 
 				$html .= '<tr>
@@ -266,8 +274,8 @@ class Keu extends CI_Controller
 						<td align="center">'.$this->m_fungsi->tanggal_ind(substr($r->tgl,0,10)).'</td>
 						<td align="left">' . $r->ket . '</td>
 						<td align="left">' . $r->jns . '</td>
-						<td align="right">Rp ' . number_format($masuk_internal, 0, ",", ".") . '</td>
-						<td align="right">Rp ' . number_format($keluar_internal, 0, ",", ".") . '</td>
+						<td align="right" '.$style_masuk.' >Rp ' . number_format($masuk_internal, 0, ",", ".") . '</td>
+						<td align="right" '.$style_keluar.'>Rp ' . number_format($keluar_internal, 0, ",", ".") . '</td>
 					</tr>';
 
 					// <td align="right" style="background-color:#b2d2fa">Rp ' . number_format($masuk_sparing, 0, ",", ".") . '</td>
