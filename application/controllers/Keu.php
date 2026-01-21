@@ -305,16 +305,16 @@ class Keu extends CI_Controller
 
 						// <td align="right" style="background-color:#cccccc;color:#080b81" ><b>Rp '.number_format($total_keluar_spar, 0, ",", ".").'</b></td>
 
-			$html .= '<tr>
-						<td align="right" colspan="4" style="background-color:#cccccc"><b>SISA &nbsp;&nbsp;&nbsp;</b></td>
+			// $html .= '<tr>
+			// 			<td align="right" colspan="4" style="background-color:#cccccc"><b>SISA &nbsp;&nbsp;&nbsp;</b></td>
 						
 
-						<td align="right" style="background-color:#cccccc;color:#f00000" colspan="2"><b>Rp '.number_format($sisa_internal, 0, ",", ".").'</b></td>
-					</tr>';
+			// 			<td align="right" style="background-color:#cccccc;color:#f00000" colspan="2"><b>Rp '.number_format($sisa_internal, 0, ",", ".").'</b></td>
+			// 		</tr>';
 					
 						// <td align="right" style="background-color:#cccccc; color:#080b81" colspan="2"><b>Rp '.number_format($sisa_sparing, 0, ",", ".").'</b></td>
 			$html .= '<tr>
-						<td align="right" colspan="4" style="background-color:#cccccc"><b>TOTAL SISA &nbsp;&nbsp;&nbsp;</b></td>
+						<td align="right" colspan="4" style="background-color:#cccccc"><b>SISA &nbsp;&nbsp;&nbsp;</b></td>
 						
 						<td align="right" style="background-color:#cccccc;" colspan="2"><b>Rp '.number_format($sisa_all, 0, ",", ".").'</b></td>
 					</tr>';
