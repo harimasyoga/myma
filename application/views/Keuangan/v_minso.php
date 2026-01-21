@@ -91,8 +91,8 @@
 							<select id="jnss" name="jnss" class="form-control select2"> 
 								<option value="masuk">MASUK INTERNAL</option>
 								<option value="keluar">KELUAR INTERNAL</option>
-								<option value="masuk_sparing">MASUK SPARING</option>
-								<option value="keluar_sparing">KELUAR SPARING</option>
+								<!-- <option value="masuk_sparing">MASUK SPARING</option>
+								<option value="keluar_sparing">KELUAR SPARING</option> -->
 							</select>
 						</div>
 					</div>

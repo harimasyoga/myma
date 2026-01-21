@@ -210,21 +210,22 @@ class Keu extends CI_Controller
 
 			$html .= "<table width=\"100%\" border=\"1\" cellspacing=\"1\" cellpadding=\"3\" style=\"border-collapse:collapse;font-size:12px;font-family: ;\">
                         <tr style=\"background-color:#cccccc\">
-							<th align=\"Center\" rowspan=\"2\">No</th>
-							<th align=\"Center\" rowspan=\"2\">Tgl Transaksi</th>
-							<th align=\"Center\" rowspan=\"2\">Keterangan</th>
-							<th align=\"Center\" rowspan=\"2\">Jenis</th>
-							<th align=\"Center\" colspan=\"2\" >Sparing</th>
-							<th align=\"Center\" colspan=\"2\" >Internal</th>
+							<th align=\"Center\" >No</th>
+							<th align=\"Center\" >Tgl Transaksi</th>
+							<th align=\"Center\" >Keterangan</th>
+							<th align=\"Center\" >Jenis</th>
+							<th align=\"Center\" >Masuk</th>
+							<th align=\"Center\" >Keluar</th>
 						</tr>
-						<tr style=\"background-color:#cccccc\">
+						";
+
+			// <tr style=\"background-color:#cccccc\">
 							
-							<th align=\"Center\">Masuk</th>
-							<th align=\"Center\">Keluar</th>
-							<th align=\"Center\">Masuk</th>
-							<th align=\"Center\">Keluar</th>
-						</tr>";
-			
+			// 				<th align=\"Center\">Masuk</th>
+			// 				<th align=\"Center\">Keluar</th>
+			// 				<th align=\"Center\">Masuk</th>
+			// 				<th align=\"Center\">Keluar</th>
+			// 			</tr>
 			$no                  = 1;
 			$total_masuk         = 0;
 			$total_keluar        = 0;
@@ -265,12 +266,13 @@ class Keu extends CI_Controller
 						<td align="center">'.$this->m_fungsi->tanggal_ind(substr($r->tgl,0,10)).'</td>
 						<td align="left">' . $r->ket . '</td>
 						<td align="left">' . $r->jns . '</td>
-						<td align="right" style="background-color:#b2d2fa">Rp ' . number_format($masuk_sparing, 0, ",", ".") . '</td>
-						<td align="right" style="background-color:#b2d2fa">Rp ' . number_format($keluar_sparing, 0, ",", ".") . '</td>
 						<td align="right">Rp ' . number_format($masuk_internal, 0, ",", ".") . '</td>
 						<td align="right">Rp ' . number_format($keluar_internal, 0, ",", ".") . '</td>
 					</tr>';
 
+					// <td align="right" style="background-color:#b2d2fa">Rp ' . number_format($masuk_sparing, 0, ",", ".") . '</td>
+					// 	<td align="right" style="background-color:#b2d2fa">Rp ' . number_format($keluar_sparing, 0, ",", ".") . '</td>
+						
 					$no++;
 
 				$total_masuk_spar   += $masuk_sparing;
@@ -286,26 +288,27 @@ class Keu extends CI_Controller
 			$html .= '<tr>
 						<td align="right" colspan="4" style="background-color:#cccccc"><b>TOTAL &nbsp;&nbsp;&nbsp;</b></td>
 						
-						<td align="right" style="background-color:#cccccc;color:#080b81" ><b>Rp '.number_format($total_masuk_spar, 0, ",", ".").'</b></td>
-
-						<td align="right" style="background-color:#cccccc;color:#080b81" ><b>Rp '.number_format($total_keluar_spar, 0, ",", ".").'</b></td>
-
 						<td align="right" style="background-color:#cccccc;color:#f00000"><b>Rp '.number_format($total_masuk, 0, ",", ".").'</b></td>
 
 						<td align="right" style="background-color:#cccccc;color:#f00000"><b>Rp '.number_format($total_keluar, 0, ",", ".").'</b></td>
 					</tr>';
 
+						// <td align="right" style="background-color:#cccccc;color:#080b81" ><b>Rp '.number_format($total_masuk_spar, 0, ",", ".").'</b></td>
+
+						// <td align="right" style="background-color:#cccccc;color:#080b81" ><b>Rp '.number_format($total_keluar_spar, 0, ",", ".").'</b></td>
+
 			$html .= '<tr>
 						<td align="right" colspan="4" style="background-color:#cccccc"><b>SISA &nbsp;&nbsp;&nbsp;</b></td>
 						
-						<td align="right" style="background-color:#cccccc; color:#080b81" colspan="2"><b>Rp '.number_format($sisa_sparing, 0, ",", ".").'</b></td>
 
 						<td align="right" style="background-color:#cccccc;color:#f00000" colspan="2"><b>Rp '.number_format($sisa_internal, 0, ",", ".").'</b></td>
 					</tr>';
+					
+						// <td align="right" style="background-color:#cccccc; color:#080b81" colspan="2"><b>Rp '.number_format($sisa_sparing, 0, ",", ".").'</b></td>
 			$html .= '<tr>
 						<td align="right" colspan="4" style="background-color:#cccccc"><b>TOTAL SISA &nbsp;&nbsp;&nbsp;</b></td>
 						
-						<td align="right" style="background-color:#cccccc;" colspan="4"><b>Rp '.number_format($sisa_all, 0, ",", ".").'</b></td>
+						<td align="right" style="background-color:#cccccc;" colspan="2"><b>Rp '.number_format($sisa_all, 0, ",", ".").'</b></td>
 					</tr>';
 			$html .= '</table>';
 		} else {
