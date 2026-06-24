@@ -35,6 +35,16 @@ class Keu extends CI_Controller
 		$this->load->view('Keuangan/v_minso', $data);
 		$this->load->view('footer');
 	}
+	
+	function Pnbp()
+	{
+		$data = array(
+			'judul' => "PBNP"
+		);
+		$this->load->view('header', $data);
+		$this->load->view('Keuangan/v_pnbp', $data);
+		$this->load->view('footer');
+	}
 
 	function load_data()
 	{
@@ -91,6 +101,60 @@ class Keu extends CI_Controller
 
 				$i++;
 			}
+		}else if ($jenis == "m_pnbp")
+		{
+			// $blnn    = $_POST['blnn'];
+			
+			$query   = $this->db->query("SELECT * FROM trs_pnbp order by id_pnbp desc")->result();
+
+			$i = 1;
+			foreach ($query as $r) {
+
+				$id   = "'$r->id_pnbp'";
+				$no_surat = "'$r->no_surat'";
+				
+				if($r->jns==1){
+					$jns = "SURAT KETERANGAN";
+				}else{
+					$jns = "SURAT KUASA";
+
+				}
+				// $print    = base_url("laporan/print_invoice_v2?no_invoice=") . $r->no_invoice;
+
+				$row = array();
+				$row[] = '<div class="text-center">'.$i.'</div>';
+				$row[] = '<div class="text-center" style="font-weight:bold;color:#f00">'.$r->id_pnbp.'</div>';
+				$row[] = '<div class="text-center" style="font-weight:bold;color:#f00">'.$r->no_surat.'</div>';
+				$row[] = '<div class="text-center" style="font-weight:bold;color:#f00">'.$r->nm_pemohon.'</div>';
+				
+				$row[] = '<div class="text-center" style="font-weight:bold;color:#f00">'.$jns.'</div>';
+				$row[] = '<div class="text-center" style="font-weight:bold;color:#f00">'.$r->tgl.'</div>';
+				$row[] = '<div class="text-center" style="font-weight:bold;color:#f00">'.$r->nm_ttd.'</div>';
+
+				$aksi = "";
+
+				if (in_array($this->session->userdata('level'), ['Admin','konsul_keu','ma']))
+				{
+					$aksi = '
+						<a class="btn btn-sm btn-warning" onclick="edit_data(' . $id . ')" title="EDIT DATA" >
+							<b><i class="fa fa-edit"></i> </b>
+						</a> 
+						
+						<button type="button" title="DELETE"  onclick="deleteData(' . $id . ','.$no_surat.')" class="btn btn-danger btn-sm">
+							<i class="fa fa-trash-alt"></i>
+						</button> 
+
+						<a target="_blank" class="btn btn-sm btn-danger" href="' . base_url("Keu/Cetak_pnbp?id=" . $r->id_pnbp ."&ctk=0" ) . '" title="CETAK" ><b><i class="fa fa-print"></i> </b></a>
+						';
+				} else {
+					$aksi = '';
+				}
+
+				$row[]    = '<div class="text-center">'.$aksi.'</div>';
+				$data[]   = $row;
+
+				$i++;
+			}
 		}else{
 			
 		}
@@ -126,6 +190,14 @@ class Keu extends CI_Controller
 			$queryd   = "SELECT*from trs_d_minso WHERE id_h_minso='$id'
 				order by nominal desc,id_d_minso";
 
+		}else if($jenis=='edit_pnbp')
+		{  				
+			$queryh   = "SELECT*from trs_pnbp WHERE id_pnbp ='$id' ";
+			
+			$data_h   = $this->db->query($queryh)->row();
+			$queryd   = "SELECT*from trs_pnbp WHERE id_pnbp ='$id' ";
+			
+
 		}else{
 
 			$queryh   = "SELECT*FROM invoice_header a where a.id='$id' and a.no_invoice='$no'";
@@ -151,6 +223,16 @@ class Keu extends CI_Controller
 		
 	}
 
+	function insert_pnbp()
+	{
+		if($this->session->userdata('username'))
+		{ 
+			$result = $this->M_keuangan->save_pnbp();
+			echo json_encode($result);
+		}
+		
+	}
+
 	function hapus()
 	{
 		$jenis    = $_POST['jenis'];
@@ -162,6 +244,12 @@ class Keu extends CI_Controller
 			$result          = $this->m_master->query("DELETE FROM trs_h_minso WHERE  $field = '$id'");
 
 			$result          = $this->m_master->query("DELETE FROM trs_d_minso WHERE  $field = '$id'");
+
+			
+		} else if ($jenis == "pnbp") 
+		{
+			$result          = $this->m_master->query("DELETE FROM trs_pnbp WHERE  $field = '$id'");
+
 
 			
 		} else {
@@ -354,6 +442,60 @@ class Keu extends CI_Controller
 		}
 		
 	}
+
+	
+	public function Cetak_pnbp()
+	{
+		$position   = 'P';
+		$judul      = 'PNBP';
+		$html       = '';
+		$ctk        = $_GET['ctk'];
+		$id         = $_GET['id'];
+
+		$query      = $this->db->query("SELECT * FROM trs_pnbp where id_pnbp='$id' ")->row();
+		if($query->jns==1){
+			$jns = "Surat Keterangan";
+		}else{
+			$jns = "Surat Kuasa";
+
+		}
+		$data = array(
+			'judul'        => "CETAK PNBP",
+			'id'           => $query->id_pnbp,
+			'no_surat'     => $query->no_surat,
+			'nm_pemohon'   => $query->nm_pemohon,
+			'jns'          => $jns,
+			'tgl'          => $this->m_fungsi->tanggal_format_indonesia(substr($query->tgl,0,10)),
+			'nm_ttd'       => $query->nm_ttd,
+		);
+		// $this->load->view('Keuangan/v_cetak_pnbp');
+
+		$html = $this->load->view('Keuangan/v_cetak_pnbp',$data,TRUE);
+
+
+		switch ($ctk) {
+			case 0;
+				echo ("<title>$judul</title>");
+				echo ($html);
+				break;
+
+			case 1;
+
+				
+				$this->m_fungsi->_mpdf_hari2($position, 'A4', $judul, $html,$judul.'.pdf', 5, 5, 5, 5);
+				break;
+
+				
+				
+			case 2;
+				header("Cache-Control: no-cache, no-store, must-revalidate");
+				header("Content-Type: application/vnd-ms-excel");
+				header("Content-Disposition: attachment; filename= $judul.xls");
+				$this->load->view('Master/master_cetak', $data);
+				break;
+		}
+	}
+
 	
 
 

@@ -105,4 +105,51 @@ class M_keuangan extends CI_Model
 		}
 		
 	}
+	
+	function save_pnbp()
+	{
+		$status_input   = $this->input->post('sts_input');
+		
+		$nm_pemohon     = $this->input->post('nm_pemohon');
+		$jns            = $this->input->post('jns');
+		$no_surat       = $this->input->post('no_surat');
+		$tgl            = $this->input->post('tgl');
+		$nm_ttd         = $this->input->post('nm_ttd');
+		
+		if($status_input == 'add')
+		{									
+			
+			$data_header = array(
+				'nm_pemohon'    => $nm_pemohon,
+				'jns'           => $jns,
+				'no_surat'      => $no_surat,
+				'tgl'           => $tgl,
+				'nm_ttd'        => $nm_ttd,
+			);
+
+			$result_header = $this->db->insert('trs_pnbp', $data_header);
+
+			return $result_header;
+			
+		}else{
+			$id_pnbp    = $this->input->post('id_pnbp');
+
+			$cek     = $this->db->query("SELECT*FROM trs_pnbp where id_pnbp ='$id_pnbp' ")->row();
+			
+			$data_header = array(
+				'nm_pemohon'    => $nm_pemohon,
+				'jns'           => $jns,
+				'no_surat'      => $no_surat,
+				'tgl'           => $tgl,
+				'nm_ttd'         => $nm_ttd,
+			);
+
+			$this->db->where('id_pnbp', $id_pnbp);
+			$result_header = $this->db->update('trs_pnbp', $data_header);
+	
+			return $result_header;
+			
+		}
+		
+	}
 }
