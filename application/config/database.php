@@ -12,6 +12,10 @@ $db['default'] = array(
 	'username' => 'root',
 	'password' => '',
 	'database' => 'my_sipp',
+
+	// 'username' => 'u640419055_myma',
+	// 'password' => 'Myma_2025*@',
+	// 'database' => 'u640419055_myma',
 	// 'hostname' => '109.106.252.101',
 
 	// // LOCAL
