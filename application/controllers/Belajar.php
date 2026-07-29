@@ -19,7 +19,7 @@ class Belajar extends CI_Controller
 	function List()
 	{
 		$data = array(
-			'judul' => "Belajar Hukum"
+			'judul' => "Belajar Hukum 1"
 		);
 		$this->load->view('header', $data);
 		$this->load->view('Belajar/v_belajar', $data);
