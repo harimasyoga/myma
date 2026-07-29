@@ -19,11 +19,21 @@ class Belajar extends CI_Controller
 	function List()
 	{
 		$data = array(
-			'judul' => "Belajar Hukum 1"
+			'judul' => "Belajar Hukum"
 		);
 		$this->load->view('header', $data);
 		$this->load->view('Belajar/v_belajar', $data);
 		$this->load->view('footer');
+	}
+	
+	function insert_belajar()
+	{
+		if($this->session->userdata('username'))
+		{ 
+			$result = $this->M_transaksi->save_belajar();
+			echo json_encode($result);
+		}
+		
 	}
 
 	function load_data()
@@ -378,6 +388,55 @@ class Belajar extends CI_Controller
 
 				$i++;
 			}
+		}else if ($jenis == "tr_belajar") {
+			// $blnn    = $_POST['blnn'];
+			
+			$query   = $this->db->query("SELECT *FROM tr_belajar order by id_belajar")->result();
+
+			$i = 1;
+			foreach ($query as $r) {
+
+				$id             = "'$r->id_belajar'";
+				$judul2         = "'$r->judul'";
+				$judul          = $r->judul;
+				$tgl            = $r->tgl;
+				$dasar_hukum    = substr($r->dasar_hukum,0,30).'...';
+				$penjelasan     = substr($r->penjelasan,0,30).'...';
+				
+				
+				// $print    = base_url("laporan/print_invoice_v2?no_invoice=") . $r->no_invoice;
+
+				$row = array();
+				$row[] = '<div class="text-center">'.$i.'</div>';
+				$row[] = '<div class="text-left" style="font-weight:bold;color:#f00">'.$judul.'</div>';
+				$row[] = '<div class="text-center" style="font-weight:bold;">'.$tgl.'</div>';
+				$row[] = '<div class="text-center" style="font-weight:bold;">'.$dasar_hukum.'</div>';
+				$row[] = '<div class="text-center" style="font-weight:bold;">'.$penjelasan.'</div>';
+				
+				$aksi = "";
+
+				if (in_array($this->session->userdata('level'), ['Admin','konsul_keu','ma']))
+				{
+					$aksi = '
+						<a class="btn btn-sm btn-warning" onclick="edit_data(' . $id . ')" title="EDIT DATA" >
+							<b><i class="fa fa-edit"></i> </b>
+						</a> 
+						
+						<button type="button" title="DELETE"  onclick="deleteData(' . $id . ','.$judul2.' )" class="btn btn-danger btn-sm">
+							<i class="fa fa-trash-alt"></i>
+						</button> 
+
+						<a target="_blank" class="btn btn-sm btn-danger" href="' . base_url("Tutorial/Cetak_tutor?id_belajar=" . $r->id_belajar."&ctk=1") . '" title="CETAK" ><b><i class="fa fa-print"></i> </b></a>
+						';
+				} else {
+					$aksi = '';
+				}
+
+				$row[]    = '<div class="text-center">'.$aksi.'</div>';
+				$data[]   = $row;
+
+				$i++;
+			}
 		}else{
 			
 		}
@@ -410,6 +469,14 @@ class Belajar extends CI_Controller
 			$data_h   = $this->db->query($queryh)->row();
 
 			$queryd   = "SELECT a.*,(select nm_job from m_job b where a.pil_job=b.id_job)nm_job FROM tr_tutorial a where id_tutor='$id' order by id_tutor";
+
+		}else if($jenis=='edit_belajar')
+		{  				
+			$queryh   = "SELECT *FROM tr_belajar where id_belajar='$id' order by id_belajar ";
+			
+			$data_h   = $this->db->query($queryh)->row();
+
+			$queryd   = "SELECT *FROM tr_belajar where id_belajar='$id' order by id_belajar ";
 
 		}else{
 
@@ -458,6 +525,9 @@ class Belajar extends CI_Controller
 		{
 			$result          = $this->m_master->query("DELETE FROM tr_tutorial WHERE  $field = '$id'");
 			
+		} else if($jenis == "belajar"){
+
+			$result = $this->m_master->query("DELETE FROM $jenis WHERE  $field = '$id'");
 		} else {
 
 			$result = $this->m_master->query("DELETE FROM $jenis WHERE  $field = '$id'");

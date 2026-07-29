@@ -13,6 +13,52 @@ class M_transaksi extends CI_Model
 	}
 
 	
+	function save_belajar()
+	{
+		$status_input   = $this->input->post('sts_input');
+		
+		$judul          = $this->input->post('judul');
+		$tgl            = $this->input->post('tgl');
+		$dasar_hukum    = $this->input->post('dasar_hukum');
+		$penjelasan     = $this->input->post('penjelasan');
+
+		
+		if($status_input == 'add')
+		{									
+			
+			$data_header = array(
+				
+				'judul'         => $judul,
+				'tgl'           => $tgl,
+				'dasar_hukum'   => $dasar_hukum,
+				'penjelasan'    => $penjelasan,
+			);
+
+			$result_header = $this->db->insert('tr_belajar', $data_header);
+
+			return $result_header;
+			
+		}else{
+			
+			$id_belajar    = $this->input->post('id_belajar');
+			
+
+			$data_header = array(
+				'judul'         => $judul,
+				'tgl'           => $tgl,
+				'dasar_hukum'   => $dasar_hukum,
+				'penjelasan'    => $penjelasan,
+			);
+
+			$this->db->where('id_belajar', $id_belajar);
+			$result_header = $this->db->update('tr_belajar', $data_header);
+
+			return $result_header;
+			
+		}
+		
+	}
+	
 	function save_tutor()
 	{
 		$status_input   = $this->input->post('sts_input');

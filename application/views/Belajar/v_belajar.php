@@ -45,9 +45,10 @@
 							<thead class="color-tabel">
 								<tr>
 									<th style="width:5%">#</th>
-									<th style="width:35%">NAMA JOB</th>
+									<th style="width:15%">JUDUL</th>
+									<th style="width:10%">TGL</th>
 									<th style="width:25%">DASAR HUKUM</th>
-									<th style="width:25%">SYARAT</th>
+									<th style="width:35%">PENJELASAN</th>
 									<th style="width:10%">AKSI</th>
 								</tr>
 							</thead>
@@ -75,15 +76,23 @@
 				<div class="col-md-12">
 								
 					<br>
-						
+										
+					<div class="card-body row" style="padding-bottom:1px;font-weight:bold">			
+											
+						<div class="col-md-2">JUDUL</div>
+						<div class="col-md-9">
+							<input type="hidden" name="sts_input" id="sts_input">
+							<input type="hidden" name="id_belajar" id="id_belajar">
+							<textarea class="form-control"  name="judul" id="judul"></textarea>
+						</div>
+						<!-- <div class="col-md-1"></div> -->
+					</div>
+
 					<div class="card-body row" style="padding-bottom:1px;font-weight:bold">			
 											
 						<div class="col-md-2">TANGGAL</div>
 						<div class="col-md-3">
-							<input type="hidden" name="sts_input" id="sts_input">
-							<input type="hidden" name="id_tutor" id="id_tutor">
-
-							<input type="date" class="form-control" name="syarat" id="syarat">
+							<input type="date" class="form-control" name="tgl" id="tgl">
 						</div>
 						<div class="col-md-6"></div>
 					</div>
@@ -91,7 +100,7 @@
 									
 					<div class="card-body row" style="padding-bottom:1px;font-weight:bold">			
 											
-						<div class="col-md-2">PASAL</div>
+						<div class="col-md-2">DASAR HUKUM</div>
 						<div class="col-md-9">
 							<textarea class="form-control"  name="dasar_hukum" id="dasar_hukum"></textarea>
 						</div>
@@ -139,67 +148,16 @@
 	{
 		kosong()
 		load_data()
-		load_job()
 		$('.select2').select2();
 	});
 	
 	var rowNum = 0;
 	
-	function pilihan_job(cek)
-	{
 
-		if(cek == 'YA')
-		{
-			$('#div_job').show("1000");
-			$('#div_job_text').hide("1000");
-		}else{
-			$('#div_job').hide("1000");
-			$('#div_job_text').show("1000");
-		}
-	}
-
-	function load_job() 
-	{
-		option = "";
-		$.ajax({
-			type       : 'POST',
-			url        : "<?= base_url(); ?>Tutorial/pilihan_job",
-			// data       : { idp: pelanggan, kd: '' },
-			dataType   : 'json',
-			beforeSend: function() {
-				swal({
-					title: 'loading ...',
-					allowEscapeKey    : false,
-					allowOutsideClick : false,
-					onOpen: () => {
-						swal.showLoading();
-					}
-				})
-			},
-			success:function(data){			
-				if(data.message == "Success"){					
-					option = `<option value="">-- Pilih --</option>`;	
-
-					$.each(data.data, function(index, val) {
-					option += "<option value='"+val.id_job+"'>"+val.nm_job+"</option>";
-					});
-
-					$('#pil_job').html(option);
-					swal.close();
-				}else{	
-					option += "<option value=''></option>";
-					$('#pil_job').html(option);					
-					swal.close();
-				}
-			}
-		});
-		
-	}
-	
 	function Cetak(ctk) 
 	{
 		// no_invoice = $("#no_invoice").val();
-		var url = "<?= base_url('Tutorial/Cetak_tutor'); ?>";
+		var url = "<?= base_url('Belajar/Cetak_belajar'); ?>";
 		window.open(url + '?ctk=' + ctk, '_blank');
 		// window.open(url, '_blank');
 	}
@@ -219,7 +177,7 @@
 			"pageLength": true,
 			"paging": true,
 			"ajax": {
-				"url": '<?php echo base_url(); ?>Tutorial/load_data/tr_tutorial',
+				"url": '<?php echo base_url(); ?>Belajar/load_data/tr_belajar',
 				"type": "POST",
 			},
 			responsive: false,
@@ -239,9 +197,9 @@
 		$("#btn-simpan").html(`<button type="button" onclick="simpan()" class="btn-tambah-produk btn  btn-primary"><b><i class="fa fa-save" ></i> Update</b> </button>`)
 
 		$.ajax({
-			url        : '<?= base_url(); ?>Tutorial/load_data_1',
+			url        : '<?= base_url(); ?>Belajar/load_data_1',
 			type       : "POST",
-			data       : { id, jenis :'edit_tutor' },
+			data       : { id, jenis :'edit_belajar' },
 			dataType   : "JSON",
 			beforeSend: function() {
 				swal({
@@ -256,21 +214,13 @@
 			success: function(data) {
 				if(data){ 
 					// header
-					$("#id_tutor").val(data.header.id_tutor);
+					$("#id_belajar").val(data.header.id_belajar);
 					// $("#pilihan").val(data.header.pilihan).trigger('change');
 
-					$("input[name='pilihan'][value='" + data.header.pilihan + "']").prop("checked", true).trigger('change');
-
-					pilihan_job(data.header.pilihan)
-					
-					$("#pil_job").val(data.header.pil_job).trigger('change');
-					// $("#pil_job").val(data.header.pil_job);
-					$("#pil_job_text").val(data.header.pil_job_text);
+					$("#judul").val(data.header.judul);
+					$("#tgl").val(data.header.tgl);
 					$("#dasar_hukum").val(data.header.dasar_hukum);
-					$("#syarat").val(data.header.syarat);
-					$("#ket").val(data.header.ket);
-					$("#tutor").val(data.header.tutor);
-					$("#error_log").val(data.header.error_log);
+					$("#penjelasan").val(data.header.penjelasan);
 					
 					
 					swal.close();
@@ -310,13 +260,12 @@
 	{
 		rowNum = 0
 		$("input[name='pilihan'][value='YA']").prop("checked", true).trigger('change');
-		pilihan_job('YA')
 		$("#pil_job").val('');			
 		$("#pil_job_text").val('');			
 		$("#dasar_hukum").val('');			
 		$("#syarat").val('');			
 		$("#ket").val('');			
-		$("#tutor").val('');			
+		$("#belajar").val('');			
 		$("#error_log").val('');		
 		
 		
@@ -325,17 +274,13 @@
 
 	function simpan() 
 	{ 
-		var id_tutor        = $("#id_tutor").val();
-		var pilihan         = $("#pilihan").val();
-		var pil_job         = $("#pil_job").val();
-		var pil_job_text    = $("#pil_job_text").val();
-		var dasar_hukum     = $("#dasar_hukum").val();
-		var syarat          = $("#syarat").val();
-		var ket             = $("#ket").val();
-		var tutor           = $("#tutor").val();
-		var error_log       = $("#error_log").val();
+		var id_belajar    = $("#id_belajar").val();
+		var judul         = $("#judul").val();
+		var tgl           = $("#tgl").val();
+		var dasar_hukum   = $("#dasar_hukum").val();
+		var penjelasan    = $("#penjelasan").val();
 		
-		if ( pilihan =='' || dasar_hukum =='' || syarat =='' || tutor =='' || error_log =='') 
+		if ( dasar_hukum =='' || penjelasan =='' || judul =='' ) 
 		{
 			swal({
 				title               : "Cek Kembali",
@@ -347,7 +292,7 @@
 		}
 
 		$.ajax({
-			url        : '<?= base_url(); ?>Tutorial/insert_tutor',
+			url        : '<?= base_url(); ?>Belajar/insert_belajar',
 			type       : "POST",
 			data       : $('#myForm').serialize(),
 			dataType   : "JSON",
@@ -420,13 +365,13 @@
 		$(".row-list").attr('style', '')
 	}
 
-	function deleteData(id,nm_job) 
+	function deleteData(id,judul) 
 	{
 		// let cek = confirm("Apakah Anda Yakin?");
 		swal({
-			title: "HAPUS PEMBAYARAN",
+			title: "HAPUS DATA",
 			html: "<p> Apakah Anda yakin ingin menghapus file ini ?</p><br>"
-			+"<strong><b>" +nm_job+ "</b> </strong> ",
+			+"<strong><b>" +judul+ "</b> </strong> ",
 			type               : "question",
 			showCancelButton   : true,
 			confirmButtonText  : '<b>Hapus</b>',
@@ -438,11 +383,11 @@
 
 		// if (cek) {
 			$.ajax({
-				url: '<?= base_url(); ?>Tutorial/hapus',
+				url: '<?= base_url(); ?>belajar/hapus',
 				data: ({
 					id         : id,
-					jenis      : 'tutor',
-					field      : 'id_tutor'
+					jenis      : 'tr_belajar',
+					field      : 'id_belajar'
 				}),
 				type: "POST",
 				beforeSend: function() {
