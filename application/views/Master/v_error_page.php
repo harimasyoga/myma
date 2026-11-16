@@ -1,6 +1,6 @@
 
 <head>
-	<link rel="icon" type="image/png" href="<?= base_url('assets/gambar/mute.png') ?>">
+	<link rel="icon" type="image/png" href="<?= base_url('assets/gambar/simatama.png') ?>">
 
 	<link rel="stylesheet" href="<?= base_url('assets/') ?>dist/css/404.css?v=1">
 

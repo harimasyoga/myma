@@ -23,8 +23,8 @@
             <div class="row">
               <div class="card-body">
                   <div align="center" style="font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;" class="">
-                      <h1><strong>MY MA </strong> <br><br>
-                  <img src="<?= base_url()?>assets/gambar/mute.png" style="width: 40%;" /> 
+                      <h1><strong></strong> <br><br>
+                  <img src="<?= base_url()?>assets/gambar/simatama.png" style="width: 40%;" /> 
                   </div>
               </div>
             </div>

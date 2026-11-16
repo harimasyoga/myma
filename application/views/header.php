@@ -133,7 +133,7 @@ $setting = $this->db->query("SELECT * FROM m_setting")->row();
 								<li class="nav-item has-treeview">
 								<a href="<?= base_url('Master') ?>" class="nav-link">
 									<h2>
-										<img src="<?= base_url()?>assets/gambar/mute.png" style="width: 20%;" />
+										<img src="<?= base_url()?>assets/gambar/simatama.png" style="width: 20%;" />
 										<!-- <i class="fas fa-feather"></i> -->
 										<?= $setting->singkatan ?></h2>
 								</a>
