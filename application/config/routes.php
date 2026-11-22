@@ -81,5 +81,8 @@ $route['ukGfQtmXfMQejYK']   = 'Jobdesk/List';
 $route['Nkhx8TAKa3cQYPk2']  = 'Belajar/List';
 $route['L5oBEbhkGZOH2tbL']  = 'Lain/Perkara_bht';
 $route['fDy3CxliLV4PDJT4']  = 'Lain/Label_box';
+$route['tDITOEx5VmvCmceV']  = 'Sop_hukum/List';
+$route['rwEIAF58djQToWK1']  = 'Sop_pidana/List';
+$route['qBcu5okGUu96BbYn']  = 'Sop_perdata/List';
 // $route['K2NSKk3jfgoAlPZ'] = 'Master/Checklist';
 

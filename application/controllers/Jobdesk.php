@@ -457,7 +457,7 @@ class Jobdesk extends CI_Controller
 			} 
 		 
 		} else if ($jenis == "m_job") {
-			$query = $this->m_master->query("SELECT * FROM m_job ORDER BY jns,urutan ")->result();
+			$query = $this->m_master->query("SELECT * FROM m_job ORDER BY urutan ")->result();
 			$i = 1;
 			foreach ($query as $r) {
 				$row = array();

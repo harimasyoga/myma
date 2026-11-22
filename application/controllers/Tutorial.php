@@ -367,6 +367,8 @@ class Tutorial extends CI_Controller
 							<i class="fa fa-trash-alt"></i>
 						</button> 
 
+						<a target="_blank" class="btn btn-sm btn-primary" href="' . base_url("Tutorial/Cetak_tutor?id_tutor=" . $r->id_tutor."&ctk=0") . '" title="CETAK" ><b><i class="fa fa-print"></i> </b></a>
+						
 						<a target="_blank" class="btn btn-sm btn-danger" href="' . base_url("Tutorial/Cetak_tutor?id_tutor=" . $r->id_tutor."&ctk=1") . '" title="CETAK" ><b><i class="fa fa-print"></i> </b></a>
 						';
 				} else {
@@ -492,28 +494,35 @@ class Tutorial extends CI_Controller
         $query_detail = $this->db->query("SELECT a.*,(select nm_job from m_job b where a.pil_job=b.id_job)nm_job FROM tr_tutorial a where id_tutor='$id_tutor' order by id_tutor");		
 
 		
-		$data_syarat = str_replace('
-', "\n ", $data->syarat);
+				$data_syarat = str_replace('
+		', "\n ", $data->syarat);
 
-		$ket_ok = str_replace('
-', "\n ", $data->ket);
+				$ket_ok = str_replace('
+		', "\n ", $data->ket);
 
-		$dasar_hukum_ok = str_replace('
-', "\n ", $data->dasar_hukum);
-		
+				$dasar_hukum_ok = str_replace('
+		', "\n ", $data->dasar_hukum);
+				
 
-		$tutor_ok = str_replace('
-', "\n ", $data->tutor);
-		
+				$tutor_ok = str_replace('
+		', "\n ", $data->tutor);
+				
 
-		$error_log_ok = str_replace('
-', "\n ", $data->error_log);
-		
+				$error_log_ok = str_replace('
+		', "\n ", $data->error_log);
+				
 		if($data->nm_job =='')
 		{
 			$nm_job2   = $data->pil_job_text;
 		}else{
 			$nm_job2   = $data->nm_job;
+		}
+		
+		if($ctk =='1')
+		{
+			$font_size   = '12px';
+		}else{
+			$font_size   = '16px';
 		}
 		
 		$position   = 'P';
@@ -538,7 +547,7 @@ class Tutorial extends CI_Controller
 		if ($query_header->num_rows() > 0) 
 		{
 
-			$html .= '<table width="100%" border="1" cellspacing="1" cellpadding="3" style="border-collapse:collapse;font-size:12px;font-family: ;">
+			$html .= '<table width="100%" border="1" cellspacing="1" cellpadding="3" style="border-collapse:collapse;font-size:'.$font_size.';font-family: ;">
 			
 				<tr style="background-color:#cccccc">
 					<th align="Center">SYARAT</th>
@@ -550,7 +559,7 @@ class Tutorial extends CI_Controller
 				</tr>
 			</table><br>';
 			
-			$html .= '<table width="100%" border="1" cellspacing="1" cellpadding="3" style="border-collapse:collapse;font-size:12px;font-family: ;">
+			$html .= '<table width="100%" border="1" cellspacing="1" cellpadding="3" style="border-collapse:collapse;font-size:'.$font_size.';font-family: ;">
 			
 				<tr style="background-color:#cccccc">
 					<th align="Center">DASAR HUKUM</th>
@@ -560,7 +569,7 @@ class Tutorial extends CI_Controller
 				</tr>
 			</table> <br>';
 
-			$html .= '<table width="100%" border="1" cellspacing="1" cellpadding="3" style="border-collapse:collapse;font-size:12px;font-family: ;">
+			$html .= '<table width="100%" border="1" cellspacing="1" cellpadding="3" style="border-collapse:collapse;font-size:'.$font_size.';font-family: ;">
 			
 				<tr style="background-color:#cccccc">
 					<th align="Center">TUTORIAL</th>
@@ -571,7 +580,7 @@ class Tutorial extends CI_Controller
 			</table>
 			<br>';
 
-			$html .= '<table width="100%" border="1" cellspacing="1" cellpadding="3" style="border-collapse:collapse;font-size:12px;font-family: ;">
+			$html .= '<table width="100%" border="1" cellspacing="1" cellpadding="3" style="border-collapse:collapse;font-size:'.$font_size.';font-family: ;">
 			
 				<tr style="background-color:#cccccc">
 					<th align="Center">ERROR LOG</th>
@@ -580,6 +589,122 @@ class Tutorial extends CI_Controller
 					<td align="left" style="width:100%">'.nl2br(htmlspecialchars($error_log_ok)).'</td>
 				</tr>
 			</table>';
+						
+
+		} else {
+			$html .= '<h1> Data Kosong </h1>';
+		}
+
+		
+		// $data['prev'] = $html;
+
+		switch ($ctk) {
+			case 0;
+				echo ("<title>$judul</title>");
+				echo ($html);
+				break;
+
+			case 1;
+
+				// $this->m_fungsi->newMpdf($judul, '', $html, 10, 3, 3, 3, 'L', 'TT', $bln_judul.'.pdf');
+
+				// $this->M_fungsi->_mpdf_hari('L', 'A4','AAA', $html, 'AAA.pdf', 5, 5, 5, 10,'','','','MINI SOCCER');
+
+				$this->m_fungsi->_mpdf_hari2($position, 'A4', $judul, $html,$judul.'.pdf', 5, 5, 5, 10);
+				
+				// $this->m_fungsi->newMpdf('aa', '', $html, 5, 5, 5, 5, $position, 'TT', 'aa.pdf');
+				break;
+
+				
+				
+			case 2;
+				header("Cache-Control: no-cache, no-store, must-revalidate");
+				header("Content-Type: application/vnd-ms-excel");
+				header("Content-Disposition: attachment; filename= $judul.xls");
+				$this->load->view('Master/master_cetak', $data);
+				break;
+		}
+		
+	}
+	
+	function Cetak_tutor_all()
+	{
+		
+		$html       = '';
+		// $id_tutor   = $_GET['id_tutor'];
+		// $ctk        = 0;
+		$ctk        = $_GET['ctk'];
+
+        $query_header = $this->db->query("SELECT a.*,IFNULL((select nm_job from m_job b where a.pil_job=b.id_job),pil_job_text)nm_job FROM tr_tutorial a  order by id_tutor");
+        
+        $data = $query_header->row();
+        
+        $query_detail = $this->db->query("SELECT a.*,IFNULL((select nm_job from m_job b where a.pil_job=b.id_job),pil_job_text)nm_job FROM tr_tutorial a  order by id_tutor");		
+
+		
+				$data_syarat = str_replace('
+		', "\n ", $data->syarat);
+
+				$ket_ok = str_replace('
+		', "\n ", $data->ket);
+
+				$dasar_hukum_ok = str_replace('
+		', "\n ", $data->dasar_hukum);
+				
+
+				$tutor_ok = str_replace('
+		', "\n ", $data->tutor);
+				
+
+				$error_log_ok = str_replace('
+		', "\n ", $data->error_log);
+		
+		if($data->nm_job =='')
+		{
+			$nm_job2   = $data->pil_job_text;
+		}else{
+			$nm_job2   = $data->nm_job;
+		}
+		
+		$position   = 'P';
+		$judul      = 'ALL TUTORIAL';
+
+		
+		$html = '<table style="margin-bottom:5px;border-collapse:collapse;vertical-align:top;width:100%;font-weight:bold;font-family:Tahoma">
+			<tr>
+				<th style="width:25%"></th>
+				<th style="width:75%"></th>
+			</tr>
+			<tr>
+				<td style="border:1;text-align:center" rowspan="2">
+					<img src="'.base_url('assets/gambar/muara teweh.png').'" width="100" height="80">
+				</td>
+				<td style="border:1;font-size:30px;padding:19px 0 ;text-align:center" >'.$judul.'</td>
+			</tr>
+		</table>
+		<br></br>';
+
+
+		if ($query_header->num_rows() > 0) 
+		{
+
+			$html .= '<table width="100%" border="1" cellspacing="1" cellpadding="3" style="border-collapse:collapse;font-size:12px;font-family: ;">
+			
+				<tr style="background-color:#cccccc">
+					<th align="Center">TUTORIAL</th>
+				</tr>
+				 ';
+				$no = 1;
+				foreach ($query_detail->result_array() as $row) {
+					$html .= '
+						<tr>
+							<td align="left">' . $no++ . '. ' .  nl2br(htmlspecialchars($row['nm_job'])) . '</td>
+						</tr>
+					';
+				}
+			$html .= '
+			</table>
+			<br>';
 						
 
 		} else {

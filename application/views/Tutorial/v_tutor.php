@@ -234,7 +234,7 @@
 	function Cetak(ctk) 
 	{
 		// no_invoice = $("#no_invoice").val();
-		var url = "<?= base_url('Tutorial/Cetak_tutor'); ?>";
+		var url = "<?= base_url('Tutorial/Cetak_tutor_all'); ?>";
 		window.open(url + '?ctk=' + ctk, '_blank');
 		// window.open(url, '_blank');
 	}
