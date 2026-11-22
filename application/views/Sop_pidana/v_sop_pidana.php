@@ -3,7 +3,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-8">
-                    <h1 style="font-size:22px;">SOP Kepaniteraan Pidana</h1>
+                    <!-- <h1 style="font-size:22px;">SOP Kepaniteraan Pidana</h1> -->
                 </div>
                 <div class="col-sm-4">
                     <ol class="breadcrumb float-sm-right"></ol>
